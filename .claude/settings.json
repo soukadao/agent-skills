@@ -62,10 +62,15 @@
     "disableBypassPermissionsMode": "disable"
   },
   "hooks": {
+    "PreToolUse": [],
+    "PostToolUse": [],
+    "Notification": [],
+    "UserPromptSubmit": [],
     "Stop": [],
     "SubagentStop": [],
-    "UserPromptSubmit": [],
-    "PreToolUse": []
+    "PreCompact": [],
+    "SessionStart": [],
+    "SessionEnd": []
   },
   "statusLine": {
     "type": "command",
