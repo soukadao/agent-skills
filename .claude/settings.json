@@ -44,6 +44,8 @@
       "Bash(gh issue reopen:*)"
     ],
     "deny": [
+      "Bash(rm:*)",
+      "Bash(mv:*)",
       "Bash(curl:*)",
       "Bash(wget:*)",
       "Bash(git add -A)",
