@@ -43,10 +43,9 @@
       "Bash(git push:*)",
       "Bash(gh issue close:*)",
       "Bash(gh issue reopen:*)",
-      "Bash(rm -r:*)"
+      "Bash(rm:*)"
     ],
     "deny": [
-      "Bash(rm:*)",
       "Bash(mv:*)",
       "Bash(curl:*)",
       "Bash(wget:*)",
