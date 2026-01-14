@@ -42,7 +42,8 @@
       "Bash(git pull:*)",
       "Bash(git push:*)",
       "Bash(gh issue close:*)",
-      "Bash(gh issue reopen:*)"
+      "Bash(gh issue reopen:*)",
+      "Bash(rmdir:*)"
     ],
     "deny": [
       "Bash(rm:*)",
