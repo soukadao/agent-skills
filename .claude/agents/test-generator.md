@@ -137,19 +137,21 @@ describe('[ModuleName]', () => {
 外部依存を適切にモック化：
 
 ```typescript
+import { vi } from 'vitest'
+
 // データベース
 const mockDb = {
-  findById: jest.fn().mockResolvedValue(mockUser),
-  save: jest.fn().mockResolvedValue(true)
+  findById: vi.fn().mockResolvedValue(mockUser),
+  save: vi.fn().mockResolvedValue(true)
 }
 
 // HTTP クライアント
 const mockHttpClient = {
-  get: jest.fn().mockResolvedValue({ data: mockResponse })
+  get: vi.fn().mockResolvedValue({ data: mockResponse })
 }
 
 // 時刻
-jest.spyOn(Date, 'now').mockReturnValue(1234567890)
+vi.spyOn(Date, 'now').mockReturnValue(1234567890)
 ```
 
 ### ステップ 5: アサーションの選択
@@ -186,20 +188,19 @@ expect(mockFn).toHaveBeenCalledTimes(1)
 生成するテストファイルは以下の構造に従います：
 
 ```typescript
-import { describe, it, expect, beforeEach, jest } from '@jest/globals'
-// または import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { SubjectUnderTest } from './subject'
 import type { DependencyType } from './dependency'
 
 describe('SubjectUnderTest', () => {
   // -- セットアップ --
   let subject: SubjectUnderTest
-  let mockDependency: jest.MockedObject<DependencyType>
+  let mockDependency: MockedObject<DependencyType>
 
   beforeEach(() => {
     mockDependency = {
-      method1: jest.fn(),
-      method2: jest.fn()
+      method1: vi.fn(),
+      method2: vi.fn()
     }
     subject = new SubjectUnderTest(mockDependency)
   })
@@ -230,11 +231,7 @@ describe('SubjectUnderTest', () => {
    - 境界値: Y個
    - 異常系: Z個
 
-2. **カバレッジの見積もり**
-   - テストでカバーされる公開API
-   - 意図的にテストしなかった部分（削除可能性の観点から）
-
-3. **追加の推奨事項**
+2. **追加の推奨事項**
    - テスタビリティを向上させるためのリファクタリング提案
    - カバーすべき追加のエッジケース
 
@@ -242,17 +239,17 @@ describe('SubjectUnderTest', () => {
 
 このプロジェクトでは：
 
-- **テストランナー**: Jest または Vitest を使用
+- **テストランナー**: Vitest を使用
 - **ファイル配置**: `*.test.ts` を実装ファイルと同じディレクトリに配置
 - **TypeScript**: 型安全性を活用し、型エラーもテスト
-- **Zod**: バリデーションスキーマのテストも含める
+- **カバレッジ**: Vitestの組み込みカバレッジツールで計測（手動での見積もりは不要）
 
 ## 実行時の注意事項
 
 - テストを生成する前に、必ず対象ファイルを **Read** で読み込む
 - 依存ファイルも必要に応じて読み込んで、型定義を理解する
 - 既存のテストファイルがある場合は、それを読み込んで不足しているケースを追加
-- テスト生成後、ユーザーに概要とカバレッジを報告
+- テスト生成後、ユーザーに生成したテストケースの概要を報告
 
 ## 例
 

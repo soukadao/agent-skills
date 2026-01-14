@@ -130,11 +130,13 @@ describe('UserRepository', () => {
 外部依存を適切にモック化します：
 
 ```typescript
+import { vi } from 'vitest'
+
 describe('OrderService', () => {
   it('注文確定時に在庫を減らす', async () => {
     // Arrange: 依存関係をモック化
     const mockInventory = {
-      decrease: jest.fn().mockResolvedValue(true)
+      decrease: vi.fn().mockResolvedValue(true)
     }
     const service = new OrderService(mockInventory)
 
@@ -199,12 +201,12 @@ describe('UserService', () => {
 
 ## TypeScript/Node.js での推奨テストフレームワーク
 
-このプロジェクトでは以下のツールを推奨します：
+このプロジェクトでは以下のツールを使用します：
 
-- **テストランナー**: Jest または Vitest
+- **テストランナー**: Vitest
 - **アサーションライブラリー**: 組み込み (expect)
-- **モックライブラリー**: jest.fn() または vitest.fn()
-- **カバレッジツール**: Jest/Vitest の組み込みカバレッジ
+- **モックライブラリー**: vi.fn()
+- **カバレッジツール**: Vitest の組み込みカバレッジ
 
 ## テストファイルの配置
 
@@ -229,11 +231,15 @@ tests/
     user.test.ts  # testsディレクトリに集約
 ```
 
-## カバレッジの目標
+## カバレッジについて
+
+カバレッジは Vitest の組み込みツールで計測します。以下は一般的な目標です：
 
 - **重要なビジネスロジック**: 90%以上
 - **ユーティリティ関数**: 80%以上
 - **単純な getter/setter**: カバレッジ不要（削除可能性）
+
+**注意**: テストコード生成時にカバレッジの見積もりは不要です。実際のカバレッジは `vitest --coverage` で計測してください。
 
 ## アンチパターン
 
