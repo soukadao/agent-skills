@@ -8,9 +8,3 @@ Do not use emojis in any communication, code, or documentation unless explicitly
 - Do not add emojis to code comments, commit messages, or documentation
 - Do not use emojis in file names or variable names
 - Only use emojis if the user explicitly requests it
-
-## Exception
-
-Emojis may be used only when:
-- The user explicitly asks for emojis to be included
-- The user's request specifically requires emoji usage as part of the functionality
