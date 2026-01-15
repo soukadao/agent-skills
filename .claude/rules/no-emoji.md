@@ -9,32 +9,6 @@ Do not use emojis in any communication, code, or documentation unless explicitly
 - Do not use emojis in file names or variable names
 - Only use emojis if the user explicitly requests it
 
-## Examples
-
-```
-# bad
-Great! 🎉 I've completed the task!
-```
-
-```python
-# bad
-# This function is awesome! 🚀
-def my_function():
-    pass
-```
-
-```
-# good
-Great! I've completed the task.
-```
-
-```python
-# good
-# This function performs the main operation
-def my_function():
-    pass
-```
-
 ## Exception
 
 Emojis may be used only when:
