@@ -1,95 +1,95 @@
 ---
 name: test-writer
-description: テストコードの作成とレビューを支援します。テストを書く際、またはテストコードの改善が必要な場合に使用します。振る舞いの検証、境界値テスト、異常系のカバレッジを重視します。
+description: Assists with writing and reviewing test code. Use when writing tests or improving test code. Emphasizes behavior verification, boundary testing, and error case coverage.
 ---
 
 # Test Writer Skill
 
-## 概要
+## Overview
 
-このスキルは、高品質なテストコードの作成を支援します。以下の原則に基づいてテストを設計します：
+This skill supports creating high-quality test code based on the following principles:
 
-1. **振る舞いの検証** - 実装の詳細ではなく、振る舞いをテストする
-2. **境界と異常系** - 正常系だけでなく、エッジケースとエラーケースもカバーする
-3. **再現性と独立** - テストは常に同じ結果を返し、他のテストに依存しない
-4. **1テスト1観点** - 各テストは1つの観点のみを検証する
-5. **失敗時の情報** - テストが失敗したとき、原因が明確にわかる
-6. **テストしやすい設計との整合** - テスタビリティを考慮した設計を促進する
-7. **削除可能性** - 不要になったテストは躊躇なく削除できる
+1. **Behavior Verification** - Test behavior, not implementation details
+2. **Boundaries and Error Cases** - Cover not only happy paths, but also edge cases and error cases
+3. **Reproducibility and Independence** - Tests always return the same results and don't depend on other tests
+4. **One Test, One Aspect** - Each test verifies only one aspect
+5. **Failure Information** - When a test fails, the cause is immediately clear
+6. **Alignment with Testable Design** - Promote designs that consider testability
+7. **Deletability** - Tests can be deleted without hesitation when no longer needed
 
-## テスト作成のガイドライン
+## Test Creation Guidelines
 
-### 1. テストの命名規則
+### 1. Test Naming Conventions
 
-テスト名は「何をテストしているか」が明確にわかるようにします：
+Test names should make it clear what is being tested:
 
 ```typescript
-// 良い例
+// Good example
 describe('User.authenticate', () => {
-  it('正しいパスワードで認証が成功する', () => {})
-  it('間違ったパスワードで認証が失敗する', () => {})
-  it('空のパスワードでバリデーションエラーを返す', () => {})
+  it('succeeds authentication with correct password', () => {})
+  it('fails authentication with wrong password', () => {})
+  it('returns validation error with empty password', () => {})
 })
 
-// 悪い例
+// Bad example
 describe('User', () => {
   it('test1', () => {})
   it('should work', () => {})
 })
 ```
 
-### 2. AAA パターン (Arrange-Act-Assert)
+### 2. AAA Pattern (Arrange-Act-Assert)
 
-テストは明確な3つのセクションに分割します：
+Tests should be divided into three clear sections:
 
 ```typescript
-it('商品をカートに追加すると合計金額が更新される', () => {
-  // Arrange: テストの準備
+it('updates total amount when adding product to cart', () => {
+  // Arrange: Prepare test
   const cart = new Cart()
   const product = { id: '1', price: 1000 }
 
-  // Act: テスト対象の操作を実行
+  // Act: Execute operation under test
   cart.add(product)
 
-  // Assert: 結果を検証
+  // Assert: Verify result
   expect(cart.total).toBe(1000)
 })
 ```
 
-### 3. 境界値と異常系のテスト
+### 3. Boundary and Error Case Testing
 
-正常系だけでなく、以下のケースもテストします：
+Test not only happy paths, but also these cases:
 
 ```typescript
-describe('配列の最大値を取得', () => {
-  it('正の数のみの配列で最大値を返す', () => {
+describe('get maximum value from array', () => {
+  it('returns max value for array with only positive numbers', () => {
     expect(max([1, 2, 3])).toBe(3)
   })
 
-  it('負の数を含む配列で最大値を返す', () => {
+  it('returns max value for array containing negative numbers', () => {
     expect(max([-1, -2, -3])).toBe(-1)
   })
 
-  it('1要素の配列でその値を返す', () => {
+  it('returns the value for single element array', () => {
     expect(max([5])).toBe(5)
   })
 
-  it('空配列でエラーをスローする', () => {
-    expect(() => max([])).toThrow('配列が空です')
+  it('throws error for empty array', () => {
+    expect(() => max([])).toThrow('Array is empty')
   })
 
-  it('数値以外を含む配列でエラーをスローする', () => {
-    expect(() => max([1, 'a', 3])).toThrow('数値以外が含まれています')
+  it('throws error for array containing non-numbers', () => {
+    expect(() => max([1, 'a', 3])).toThrow('Contains non-numeric values')
   })
 })
 ```
 
-### 4. テストの独立性
+### 4. Test Independence
 
-各テストは独立して実行可能にします：
+Each test should be independently executable:
 
 ```typescript
-// 良い例
+// Good example
 describe('UserRepository', () => {
   let repository: UserRepository
 
@@ -97,44 +97,44 @@ describe('UserRepository', () => {
     repository = new UserRepository()
   })
 
-  it('ユーザーを作成できる', () => {
+  it('can create user', () => {
     const user = repository.create({ name: 'Alice' })
     expect(user.name).toBe('Alice')
   })
 
-  it('ユーザーを検索できる', () => {
+  it('can find user', () => {
     const user = repository.create({ name: 'Bob' })
     const found = repository.findById(user.id)
     expect(found).toEqual(user)
   })
 })
 
-// 悪い例（テストが順序に依存）
+// Bad example (tests depend on execution order)
 describe('UserRepository', () => {
   let userId: string
 
-  it('ユーザーを作成できる', () => {
+  it('can create user', () => {
     const user = repository.create({ name: 'Alice' })
-    userId = user.id // 次のテストで使用
+    userId = user.id // Used in next test
   })
 
-  it('ユーザーを検索できる', () => {
-    const found = repository.findById(userId) // 前のテストに依存
+  it('can find user', () => {
+    const found = repository.findById(userId) // Depends on previous test
     expect(found.name).toBe('Alice')
   })
 })
 ```
 
-### 5. モックとスタブの使用
+### 5. Using Mocks and Stubs
 
-外部依存を適切にモック化します：
+Mock external dependencies appropriately:
 
 ```typescript
 import { vi } from 'vitest'
 
 describe('OrderService', () => {
-  it('注文確定時に在庫を減らす', async () => {
-    // Arrange: 依存関係をモック化
+  it('decreases inventory when order is placed', async () => {
+    // Arrange: Mock dependencies
     const mockInventory = {
       decrease: vi.fn().mockResolvedValue(true)
     }
@@ -149,31 +149,31 @@ describe('OrderService', () => {
 })
 ```
 
-### 6. 失敗時の明確なメッセージ
+### 6. Clear Failure Messages
 
-テストが失敗したとき、何が問題かすぐにわかるようにします：
+When a test fails, make it immediately clear what the problem is:
 
 ```typescript
-// 良い例
-it('ユーザー名が20文字以下であること', () => {
+// Good example
+it('username should be 20 characters or less', () => {
   const longName = 'a'.repeat(21)
   const result = validateUsername(longName)
   expect(result.isValid).toBe(false)
-  expect(result.error).toBe('ユーザー名は20文字以内にしてください')
+  expect(result.error).toBe('Username must be 20 characters or less')
 })
 
-// 悪い例
+// Bad example
 it('validation', () => {
-  expect(validate('x')).toBe(false) // なぜ失敗したかわからない
+  expect(validate('x')).toBe(false) // Why did it fail?
 })
 ```
 
-### 7. テストデータの管理
+### 7. Test Data Management
 
-テストデータはファクトリーやビルダーパターンで管理します：
+Manage test data with factories or builder patterns:
 
 ```typescript
-// テストデータファクトリー
+// Test data factory
 function createTestUser(overrides = {}) {
   return {
     id: '1',
@@ -185,13 +185,13 @@ function createTestUser(overrides = {}) {
 }
 
 describe('UserService', () => {
-  it('管理者のみが削除できる', () => {
+  it('only admins can delete', () => {
     const admin = createTestUser({ role: 'admin' })
     const result = service.canDelete(admin)
     expect(result).toBe(true)
   })
 
-  it('一般ユーザーは削除できない', () => {
+  it('regular users cannot delete', () => {
     const user = createTestUser({ role: 'user' })
     const result = service.canDelete(user)
     expect(result).toBe(false)
@@ -199,28 +199,28 @@ describe('UserService', () => {
 })
 ```
 
-## TypeScript/Node.js での推奨テストフレームワーク
+## Recommended Test Framework for TypeScript/Node.js
 
-このプロジェクトでは以下のツールを使用します：
+This project uses the following tools:
 
-- **テストランナー**: Vitest
-- **アサーションライブラリー**: 組み込み (expect)
-- **モックライブラリー**: vi.fn()
-- **カバレッジツール**: Vitest の組み込みカバレッジ
+- **Test Runner**: Vitest
+- **Assertion Library**: Built-in (expect)
+- **Mock Library**: vi.fn()
+- **Coverage Tool**: Vitest built-in coverage
 
-## テストファイルの配置
+## Test File Placement
 
 ```
 src/
   user/
     user.ts
-    user.test.ts  # 実装と同じディレクトリ
+    user.test.ts  # Same directory as implementation
   cart/
     cart.ts
     cart.test.ts
 ```
 
-または
+Or
 
 ```
 src/
@@ -228,47 +228,47 @@ src/
     user.ts
 tests/
   user/
-    user.test.ts  # testsディレクトリに集約
+    user.test.ts  # Consolidated in tests directory
 ```
 
-## カバレッジについて
+## Coverage
 
-カバレッジは Vitest の組み込みツールで計測します：
+Measure coverage with Vitest's built-in tool:
 
 ```bash
 vitest run --coverage
 ```
 
-**カバレッジの方針**:
-- **C0 (Statement Coverage)**: 100% - すべてのコード行を実行
-- **C1 (Branch Coverage)**: 100% - すべての条件分岐を実行
-- **単純な getter/setter**: テスト不要（削除可能性の観点から）
+**Coverage Policy**:
+- **C0 (Statement Coverage)**: 100% - Execute all code lines
+- **C1 (Branch Coverage)**: 100% - Execute all conditional branches
+- **Simple getter/setter**: No test needed (from deletability perspective)
 
-## アンチパターン
+## Anti-patterns
 
-避けるべきパターン：
+Patterns to avoid:
 
-1. **実装の詳細をテストする**
+1. **Testing implementation details**
    ```typescript
-   // 悪い例
-   it('内部のキャッシュマップを使用する', () => {
+   // Bad example
+   it('uses internal cache map', () => {
      expect(service._cache instanceof Map).toBe(true)
    })
    ```
 
-2. **複数の観点を1つのテストで検証**
+2. **Verifying multiple aspects in one test**
    ```typescript
-   // 悪い例
-   it('ユーザー機能', () => {
+   // Bad example
+   it('user functionality', () => {
      expect(user.create()).toBeTruthy()
      expect(user.update()).toBeTruthy()
      expect(user.delete()).toBeTruthy()
    })
    ```
 
-3. **テスト間の状態共有**
+3. **Sharing state between tests**
    ```typescript
-   // 悪い例
+   // Bad example
    let sharedState = {}
    it('test1', () => { sharedState.value = 1 })
    it('test2', () => { expect(sharedState.value).toBe(1) })
