@@ -11,7 +11,7 @@ Do not use emojis in any communication, code, or documentation unless explicitly
 
 ## Examples
 
-### Bad
+# bad
 
 ```
 Great! 🎉 I've completed the task!
@@ -23,7 +23,7 @@ def my_function():
     pass
 ```
 
-### Good
+# good
 
 ```
 Great! I've completed the task.
