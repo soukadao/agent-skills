@@ -2,7 +2,6 @@
 name: test-generator
 description: 包括的なテストスイートを生成する専門家。モジュール全体やファイル全体のテストを作成する必要がある場合に使用します。振る舞いの検証、境界値テスト、異常系のカバレッジを自動的に生成します。
 tools: Read, Grep, Glob, Write
-model: sonnet
 permissionMode: acceptEdits
 ---
 
