@@ -236,7 +236,7 @@ tests/
 カバレッジは Vitest の組み込みツールで計測します：
 
 ```bash
-vitest --coverage
+vitest run --coverage
 ```
 
 **カバレッジの方針**:
